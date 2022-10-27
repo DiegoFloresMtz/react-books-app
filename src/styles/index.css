@@ -40,7 +40,7 @@ button:hover {
 }
 /* Heading */
 h3,
-label[for="new-task"] {
+label[for="new-book"] {
   color: #333;
   font-weight: 700;
   font-size: 15px;
@@ -65,12 +65,11 @@ input[type="text"]:focus {
   color: #333;
 }
 
-/* New Task */
-label[for="new-task"] {
+label[for="new-book"] {
   display: block;
   margin: 0 0 20px;
 }
-input#new-task {
+input#new-book {
   float: left;
   width: 318px;
 }
@@ -78,7 +77,6 @@ p > button:hover {
   color: #0fc57c;
 }
 
-/* Task list */
 li {
   overflow: hidden;
   padding: 20px 0;
@@ -102,21 +100,9 @@ li > .delete:hover {
   color: #cf2323;
 }
 
-/* Completed */
-#completed-tasks label {
-  text-decoration: line-through;
-  color: #888;
-}
-
-/* Edit Task */
-ul li input[type="text"] {
-  display: none;
-}
-
-ul li.editMode input[type="text"] {
-  display: block;
-}
-
-ul li.editMode label {
-  display: none;
+#wishlist label {
+  text-decoration:solid;
+  color: red;
+  font-weight: bold;
+  font-size:1.4rem;
 }

@@ -75,10 +75,10 @@ function Landing() {
             <p>
                 <label>Add a Book</label>
                 <input
-                    id="new-task"
+                    id="new-book"
                     type="text"
                     value={value}
-                    name="todoField"
+                    name="bookField"
                     onKeyDown={handleKeyPress}
                     onChange={onValueChange}
                 />
@@ -86,7 +86,7 @@ function Landing() {
             </p>
             <button onClick={addBook}>Add</button>
             <h3>Book List</h3>
-            <ul id="incomplete-tasks">
+            <ul id="add">
                 {books
                     .filter(book => !book.status)
                     .map(book => (
@@ -99,7 +99,7 @@ function Landing() {
             </ul>
 
             <h3>Wishlist</h3>
-            <ul id="completed-tasks">
+            <ul id="wishlist">
                 {books
                     .filter(book => book.status)
                     .map(book => (
