@@ -1,10 +1,10 @@
-import Landing from './components/Landing/Landing';
+import {Landing} from './components';
 
 function App() {
   return (
-    <div>
-      <Landing/>
-    </div>
+      <div>
+        <Landing />
+      </div>
   );
 }
 

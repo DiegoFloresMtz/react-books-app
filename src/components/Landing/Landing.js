@@ -1,78 +1,117 @@
-import React, { useState } from "react";
-import { Button, TextInput } from "@primer/react";
-import {
-    List,
-    ListItem,
-    BookTitle,
-    Filters,
-    Container
-} from "../../components";
-import { VisibilityFilters, getFilteredBookListAndCounts } from "../../utils/index";
+import React, { useState, useEffect } from "react";
+import localforage from "localforage";
+import List from "../List/List";
+import "../../styles/index.css";
 
-const initialBooks = [
-    { title: "El ocho", read: false },
-    { title: "México Barbaro", read: false },
-    { title: "Atlas México", read: false }
-];
 
-export default function Landing() {
-    const [aBook, setABook] = useState("");
-    const [BooksList, setABookList] = useState(initialBooks);
-    const [visibilityFilter, setVisibilityFilter] = useState(
-        VisibilityFilters.ALL
-    );
+function Landing() {
+    const initialState = [
+        { name: "El ocho", status: true },
+        { name: "México Barbaro", status: true },
+        { name: "Atlas México", status: true }
+    ];
+    const [books, setBooks] = useState([]);
+    const [bookVals, setBookVals] = useState(initialState);
+    const [value, setValue] = useState("");
+
+    useEffect(() => {
+        localforage.setItem("books", books);
+    }, [books]);
+
+    useEffect(() => {
+        localforage.getItem("books", (_, value) => {
+            if (value) setBooks(value);
+        });
+    }, []);
 
     const onSubmit = evt => {
         evt.preventDefault();
-        if (aBook === "") return;
-        setABookList([{ title: aBook, read: false }, ...BooksList]);
-        setABook("");
+        if (books === "") return;
+        setBookVals([{ title: books, status: false }, ...bookVals]);
+        setBooks("");
+    };
+    
+    const onValueChange = ({ target: { value } }) => {
+        setValue(value);
+    };
+    
+
+    const addBook = () => {
+        if (value !== "") {
+            setBooks([
+                ...books,
+                {
+                    name: value,
+                    status: false,
+                    id: Date.now() + Math.random()
+                }
+            ]);
+            setValue("");
+        }
     };
 
-    const onBookRead = index => {
-        const newBookList = [...BooksList];
-        BooksList[index].read = !BooksList[index].read;
-        setABookList(newBookList);
+    const handleKeyPress = ({ key }) => {
+        if (key === "Enter") {
+            addBook();
+        }
     };
 
-    const { filteredList, ...counts } = getFilteredBookListAndCounts(
-        BooksList,
-        visibilityFilter
-    );
+    const handleCheckboxChange = id => {
+        setBooks(
+            books.map(book => {
+                if (book.id === id) return { ...book, status: !book.status };
+                return book;
+            })
+        );
+    };
+
+    const deleteBook = id => {
+        setBooks(books.filter(book => book.id !== id));
+    };
+
     return (
-        <Container>
-            <h1>React Books's Readlist</h1>
-            <form onSubmit={onSubmit} style={{ width: "100%", marginTop: "1rem" }}>
-                <div>
-                    <TextInput
-                        aria-label="books"
-                        name="books"
-                        placeholder="Books Here"
-                        value={aBook}
-                        onChange={ev => setABook(ev.target.value)}
-                        marginRight="0.5rem"
-                        style={{ flexGrow: 1 }}
-                    />
-                    <Button type="submit">Add</Button>
-                </div>
-            </form>
-            <Filters
-                visibilityFilter={visibilityFilter}
-                onVisibilityFilterChange={setVisibilityFilter}
-                {...counts}
-            />
-            <List>
-                {filteredList.map((item, index) => (
-                    <ListItem key={`${item.title}_${index}`}>
-                        <BookTitle read={item.read}>{item.title}</BookTitle>
-                        <input
-                            type="checkbox"
-                            checked={item.read}
-                            onChange={() => onBookRead(index)}
+        <div className="container">
+            <h1>React Books Wishlist</h1>
+            <p>
+                <label>Add a Book</label>
+                <input
+                    id="new-task"
+                    type="text"
+                    value={value}
+                    name="todoField"
+                    onKeyDown={handleKeyPress}
+                    onChange={onValueChange}
+                />
+                
+            </p>
+            <button onClick={addBook}>Add</button>
+            <h3>Book List</h3>
+            <ul id="incomplete-tasks">
+                {books
+                    .filter(book => !book.status)
+                    .map(book => (
+                        <List
+                            book={book}
+                            handleCheckboxChange={handleCheckboxChange}
+                            deleteBook={deleteBook}
                         />
-                    </ListItem>
-                ))}
-            </List>
-        </Container>
+                    ))}
+            </ul>
+
+            <h3>Wishlist</h3>
+            <ul id="completed-tasks">
+                {books
+                    .filter(book => book.status)
+                    .map(book => (
+                        <List
+                            book={book}
+                            handleCheckboxChange={handleCheckboxChange}
+                            deleteBook={deleteBook}
+                        />
+                    ))}
+            </ul>
+        </div>
     );
 }
+
+export default Landing
