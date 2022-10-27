@@ -15,5 +15,8 @@ Runs the app in the development mode.\
 Open [localhost:300](localhost:300) to view it in your browser.
 
 You'll see a form with an inputbox and two buttons, you can add books with the inputbox and see both lists(All books, Wishlisted books).
-To add a book to the wishlist you'll need to click on the checkbox
+To add a book to the wishlist you'll need to click on name
+
+
+
 ![Screenshot](screenshot.PNG)
