@@ -1,11 +1,10 @@
 import React from "react";
 
 const List = ({ book, handleCheckboxChange, deleteBook, bookVals }) => (
-    <li key={book.id}>
+    <li id={book.id}>
         <input
             type="checkbox"
             checked={book.status}
-            onLoadStart
             onChange={() => handleCheckboxChange(book.id)}
         />
         <label>{book.name}</label>

@@ -5,13 +5,7 @@ import "../../styles/index.css";
 
 
 function Landing() {
-    const initialState = [
-        { name: "El ocho", status: true },
-        { name: "México Barbaro", status: true },
-        { name: "Atlas México", status: true }
-    ];
     const [books, setBooks] = useState([]);
-    const [bookVals, setBookVals] = useState(initialState);
     const [value, setValue] = useState("");
 
     useEffect(() => {
@@ -24,13 +18,6 @@ function Landing() {
         });
     }, []);
 
-    const onSubmit = evt => {
-        evt.preventDefault();
-        if (books === "") return;
-        setBookVals([{ title: books, status: false }, ...bookVals]);
-        setBooks("");
-    };
-    
     const onValueChange = ({ target: { value } }) => {
         setValue(value);
     };
@@ -50,8 +37,8 @@ function Landing() {
         }
     };
 
-    const handleKeyPress = ({ key }) => {
-        if (key === "Enter") {
+    const handleKeyPress = ({ id }) => {
+        if (id === "Enter") {
             addBook();
         }
     };
